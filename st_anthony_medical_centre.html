@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>St. Anthony Medical Centre</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .auto-style1 {
+      color: #2F662F;
+    }
+
+    footer {
+      background: #006400;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      margin-top: 3em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>St. Anthony Medical Centre</h1>
+    <p>Herbal Medicine & Natural Healing</p>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#products">Products</a>
+      <a href="#cart">Cart</a>
+      <a href="#contact">Contact</a>
+      <p><strong>OFFICIAL DOCTOR: MS. NAMUGANGA AGNES</strong></p>
+    </nav>
+  </header>
+
+  <section id="hero">
+    <h2>Natural Healing with Nature</h2>
+    <p>We provide trusted herbal solutions to support your health and wellness.</p>
+  </section>
+
+  <section id="about">
+    <h2>About Us</h2>
+    <p>
+      St. Anthony Medical Centre is a trusted herbal medicine pharmacy in Uganda,
+      dedicated to holistic healing using natural remedies. Our trained herbalists provide personalized care rooted in traditional medicine and modern research.
+    </p>
+  </section>
+
+  <section id="products">
+    <h2>Our Herbal Products</h2>
+    <div class="product-list">
+      <div class="product">
+        <h3>5L for Pregnant Women</h3>
+        <p>Enables pregnant mothers to deliver well. (3 doses, 5L each)</p>
+        <p class="auto-style1">Shs.50,000</p>
+        <button onclick="addToCart('5L for Pregnant Women', 50000)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <h3>5L for Ulcers</h3>
+        <p>Treatment for ulcers. Shs.10,000 per litre.</p>
+        <p class="auto-style1">Shs.50,000</p>
+        <button onclick="addToCart('5L for Ulcers', 50000)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <h3>2 Bars of Miseals Soap</h3>
+        <p>Works on all skin diseases</p>
+        <p class="auto-style1">Shs.20,000</p>
+        <button onclick="addToCart('2 Bars of Miseals Soap', 20000)">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="cart">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <p><strong>Total: Shs.<span id="cart-total">0</span></strong></p>
+
+    <h3>Checkout</h3>
+    <p><strong>Step 1:</strong> Send payment via <strong>Airtel Money</strong> to:</p>
+    <ul>
+      <li><strong>Name:</strong> St. Anthony Medical Centre</li>
+      <li><strong>Number:</strong> +256 753669748</li>
+      <li><strong>Amount:</strong> Match the total shown above</li>
+    </ul>
+
+    <p><strong>Step 2:</strong> After payment, fill out the form below:</p>
+
+    <form id="checkout-form">
+      <label for="customer-name">Full Name:</label>
+      <input type="text" id="customer-name" name="customer-name" required />
+
+      <label for="customer-email">Email:</label>
+      <input type="email" id="customer-email" name="customer-email" required />
+
+      <label for="customer-address">Delivery Address:</label>
+      <textarea id="customer-address" name="customer-address" rows="3" required></textarea>
+
+      <label for="transaction-id">Airtel Money Transaction ID:</label>
+      <input type="text" id="transaction-id" name="transaction-id" required />
+
+      <button type="submit">Submit Order</button>
+    </form>
+
+    <p id="checkout-message" style="color: green; margin-top: 1em;"></p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <form>
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+
+    <p>Email: <a href="mailto:stanthonymedicalcentre@gmail.com">stanthonymedicalcentre@gmail.com</a></p>
+    <p>Phone: <a href="tel:+256753669748">+256 753669748</a></p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 St. Anthony Medical Centre | All rights reserved</p>
+  </footer>
+
+  <script>
+    let cart = [];
+
+    function addToCart(productName, price) {
+      cart.push({ name: productName, price });
+      updateCartDisplay();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      const totalElement = document.getElementById('cart-total');
+      cartItemsContainer.innerHTML = '';
+
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.innerHTML = `
+          ${item.name} - Shs.${item.price.toLocaleString()}
+          <button onclick="removeFromCart(${index})">Remove</button>
+        `;
+        cartItemsContainer.appendChild(itemDiv);
+        total += item.price;
+      });
+
+      totalElement.textContent = total.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('checkout-form');
+      const message = document.getElementById('checkout-message');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (cart.length === 0) {
+          alert('Your cart is empty!');
+          return;
+        }
+
+        const name = document.getElementById('customer-name').value;
+        const email = document.getElementById('customer-email').value;
+        const address = document.getElementById('customer-address').value;
+        const txnId = document.getElementById('transaction-id').value;
+
+        message.textContent = `Thank you, ${name}! We received your order. Once we verify the Airtel Money transaction ID (${txnId}), we will contact you at ${email} and deliver to: ${address}.`;
+
+        cart = [];
+        updateCartDisplay();
+        form.reset();
+      });
+    });
+  </script>
+</body>
+</html>
